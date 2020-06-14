@@ -12,13 +12,13 @@ stages:
   - job: 'Build'
     displayName: 'Build job'
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'ubuntu-18.04'
       demands:
-        - npm
+      - npm
 
     variables:
       wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
-      dotnetSdkVersion: '3.1.100'
+      dotnetSdkVersion: '3.1.300'
 
     steps:
     - task: UseDotNet@2
@@ -86,11 +86,11 @@ stages:
       runOnce:
         deploy:
           steps:
-            - download: current
-              artifact: drop
-            - task: AzureWebApp@1
-              displayName: 'Azure App Service Deploy: Website'
-              inputs:
-                azureSubscription: 'Resource Manager - Tailspin'
-                appName: '$(WebAppNameDev)'
-                package: '(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+          - download: current
+            artifact: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Resource Manager - Tailspin - Space Game'
+              appName: '$(WebAppNameDev)'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
